@@ -1,12 +1,8 @@
-
+import time, csv, sys, io, re
+import twitter
+from textblob import TextBlob
 try:
-	import time
-	import twitter
-	from textblob import TextBlob
-	import csv
-	import sys
-	import io
-	import re
+	pass
 except:
 	print("ERROR MESSAGE:")
 	print("You should have twitter-pyton api installed.")
@@ -62,8 +58,8 @@ consumer_secret = 'h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc'
 access_token = '963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP'
 access_secret = 'lp2Hu3FOdJ5Z563Isb7VCUtTk2UwH03LLummrYskunnd3'
 
-#40.7127° N, 74.0134° W One World Trade Center
-#37.8199° N, 122.4783° W Golden Gate Bridge
+#40.7127° N, -74.0134° W One World Trade Center
+#37.8199° N, -122.4783° W Golden Gate Bridge
 #Getting the Latitude and Longitude from Google Places API
 outfile = "tweets.csv"
 latitude = 37.8199
@@ -101,6 +97,7 @@ except:
   #  	f.write(status.text)
 #f.close()
 try:
+	global last_id
 	result_count= 0
 	last_id = None
 	query = api.GetSearch(geocode = (latitude, longitude, "100mi"), count=512, max_id = last_id)
@@ -115,6 +112,7 @@ except:
 total_count = 1
 needed_tweets = 1000
 while(total_count<needed_tweets):
+	query = api.GetSearch(geocode = (latitude, longitude, "100mi"), count=512, max_id = last_id)
 	for result in query:
 		#print(result)
 		only_ascii = strip_non_ascii(result.text)

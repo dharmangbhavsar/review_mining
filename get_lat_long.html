@@ -136,10 +136,12 @@
           // For each place, get the icon, name and location.
           var bounds = new google.maps.LatLngBounds();
           places.forEach(function(place) {
+            console.log(place);
             name = place.name;
+            type = place.types[0];
             lat = parseFloat(place.geometry.location['lat']());
             lng = parseFloat(place.geometry.location['lng']());
-            alert(name + " - Latitude: " + lat + ", Longitude: " + lng)
+            alert(name + " - Type: " + place.types.join(",") + ", Latitude: " + lat + ", Longitude: " + lng)
           });
         });
       }
