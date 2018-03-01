@@ -86,11 +86,17 @@
       #target {
         width: 345px;
       }
+      #map, #pano {
+        float: left;
+        height: 100%;
+        width: 45%;
+      }
     </style>
   </head>
   <body>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box" style="height: 50px; margin-left: 200px; margin-top: 200px;"/>
     <div id="map"></div>
+    <div id="pano"></div>
     <script>
       // This example adds a search box to a map, using the Google Place Autocomplete
       // feature. People can enter geographical searches. The search box will return a
@@ -141,13 +147,25 @@
             type = place.types[0];
             lat = parseFloat(place.geometry.location['lat']());
             lng = parseFloat(place.geometry.location['lng']());
-            alert(name + " - Type: " + place.types.join(",") + ", Latitude: " + lat + ", Longitude: " + lng)
+            //alert(name + " - Type: " + place.types.join(",") + ", Latitude: " + lat + ", Longitude: " + lng)
+            var panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'), {
+                position: {lat: lat, lng: lng},
+                pov: {
+                  heading: 34,
+                  pitch: 10
+                }
+              });
+            $("#map").hide();
+            
+            map.setStreetView(panorama);
           });
         });
       }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ  &libraries=places&callback=initAutocomplete"
+    <script src="jquery.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ&libraries=places&callback=initAutocomplete"
          async defer></script>
   </body>
 </html>
