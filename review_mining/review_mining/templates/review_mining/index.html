@@ -7,14 +7,15 @@
     {% load staticfiles %}
     <base href="http://{{ request.get_host }}/"></base>
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
-  </head>
-  <body>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box" style="height: 50px; margin-left: 30%; margin-top: 2%"/>
-    <div id="map"></div>
-    <div id="pano"></div>
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/index.js' %}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ&libraries=places&callback=initAutocomplete"
          async defer></script>
+  </head>
+  <body>
+    <input id="search_input" class="controls" type="text" placeholder="Search Here.."/>
+    <div id="map"></div>
+    <div id="reviews"></div>
+    <div id="csrf_token">{% csrf_token %}</div>
   </body>
 </html>

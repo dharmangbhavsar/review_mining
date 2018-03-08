@@ -6,7 +6,7 @@ function initAutocomplete() {
   });
 
   // Create the search box and link it to the UI element.
-  var input = document.getElementById('pac-input');
+  var input = document.getElementById('search_input');
   var searchBox = new google.maps.places.SearchBox(input);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
@@ -40,6 +40,8 @@ function initAutocomplete() {
       lat = parseFloat(place.geometry.location['lat']());
       lng = parseFloat(place.geometry.location['lng']());
       //alert(name + " - Type: " + place.types.join(",") + ", Latitude: " + lat + ", Longitude: " + lng)
+      
+
       var panorama = new google.maps.StreetViewPanorama(
       document.getElementById('map'), {
           position: {lat: lat, lng: lng},
@@ -48,8 +50,20 @@ function initAutocomplete() {
             pitch: 0
           }
         });
-      map.setStreetView(panorama);
-
+      //map.setStreetView(panorama);
+      $("#map").remove();
+      
+      var csrf = $("#csrf_token").find("input").val();
+      $.ajax({
+        type: "POST",
+        url: "review_mining/get_reviews",
+        data: { name: name, lat: lat, lng: lng, csrfmiddlewaretoken: csrf },
+        success: function(response){
+          $("#reviews").html(response);
+          $("#reviews").show();
+          console.log(response);
+        }
+      });
     });
   });
 }

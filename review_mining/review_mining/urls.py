@@ -20,4 +20,5 @@ app_name = "review_mining"
 # URL: review_mining/
 urlpatterns = [
     url(r'^review_mining/home$', views.index.as_view(), name='index'),
+    url(r'^review_mining/get_reviews$', views.get_reviews.as_view(), name='get_reviews')
 ]
