@@ -1,11 +1,11 @@
-#map {
-  height: 100%;
-}
 /* Optional: Makes the sample page fill the window. */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-image: url('../img/bg.jpg');
+  background-size:100% 100%;
+  background-repeat: no-repeat;
 }
 #description {
   font-family: Roboto;
@@ -61,8 +61,8 @@ html, body {
   text-overflow: ellipsis;
   width: 400px;
   height: 50px; 
-  margin-left: 30%; 
-  margin-top: 2%
+  margin-left: 35%; 
+  margin-top: 20%
 }
 
 #search_input:focus {
@@ -78,15 +78,4 @@ html, body {
 }
 #target {
   width: 345px;
-}
-#map, #pano {
-  float: left;
-  height: 100%;
-  width: 100%;
-}
-#reviews{
-  display: none;
-  margin-top: 10%;
-  height: 80%;
-  width: 100%
 }

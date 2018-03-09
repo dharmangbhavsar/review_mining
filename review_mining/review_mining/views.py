@@ -38,7 +38,7 @@ class get_reviews(View):
 		latitude = float(get.get('lat'))
 		longitude = float(get.get('lng'))
 		max_range = 1 			# search range in kilometres
-		num_results = 5			# minimum results to obtain
+		num_results = 10		# minimum results to obtain
 		
 		twitter = Twitter(
 		        auth = OAuth(access_key, access_secret, consumer_key, consumer_secret))
@@ -47,6 +47,12 @@ class get_reviews(View):
 		loop_cnt = 1000
 		last_id = None
 		all_tweets = []
+
+		# words_f = open("tweets.data","rb")
+		# all_tweets = pickle.load(words_f)
+		# words_f.close()
+		# return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude})
+		
 		while result_count <  num_results and loop_cnt > 0:
 			query = twitter.search.tweets(q = "", geocode = "%f,%f,%dkm" % (latitude, longitude, max_range), count = 100, max_id = last_id)
 
@@ -63,7 +69,7 @@ class get_reviews(View):
 				last_id = result["id"]
 				loop_cnt -= 1
 			
-		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name})
+		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude})
 	
 	def post(self,request):
 		pass

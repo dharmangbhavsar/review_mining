@@ -6,33 +6,88 @@
     <title>Search for reviews</title>
     {% load staticfiles %}
     <base href="http://{{ request.get_host }}/"></base>
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'others/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
     <link rel="stylesheet" href="{% static 'css/ionicons.css' %}">
+    <style type="text/css">
+    	html, body {
+	        height: 100%;
+	    }
+    	hr {
+		  border: 0;
+		  clear:both;
+		  display:block;
+		  width: 96%;               
+		  background-color:gray;
+		  height: 1px;
+		}
+		#pano {
+	        float: left;
+	        height: 100%;
+	    }
+	    .text-gray{
+	    	color: gray;
+	    }
+    </style>
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'others/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'others/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+    <script type="text/javascript">
+    	function initAutocomplete() {
+	    	var map = new google.maps.Map(document.getElementById('pano'), {
+			    center: {lat: 0, lng: 0},
+			    zoom: 3,
+			    mapTypeId: 'roadmap'
+			  });
+
+	    	var panorama = new google.maps.StreetViewPanorama(
+			document.getElementById('pano'), {
+			  position: {lat: {{ lat }}, lng: {{ lng }}},
+			  pov: {
+			    heading: 0,
+			    pitch: 0
+			  }
+			});
+			map.setStreetView(panorama);
+		}
+		$(function(){
+			$('#all_tweets_div').slimScroll({
+		        height: '550px'
+		    });
+		});
+    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ&libraries=places&callback=initAutocomplete"
          async defer></script>
+    
   </head>
   <body>
-	<div id="twitter_reviews" class="col-sm-4">
-		<h3 class="text-center">Twitter reviews</h3>
-		{% for twt in all_tweets %}
-			<div class="col-sm-12">
-				<div class="media">
-					<div class="media-left">
-						<img src="{{ twt.profile_img }}" class="media-object" style="width:60px">
+  	<div id="main_div" style="height: 100%">
+  		<div id="pano" class="col-sm-8">
+  			
+  		</div>
+		<div id="twitter_reviews" class="col-sm-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<p class="h3 text-center">Twitter reviews</p>
+				</div>
+				<div id="all_tweets_div" class="panel-body">
+				{% for twt in all_tweets %}
+					<div class="col-sm-12">
+						<div class="media">
+							<div class="media-left">
+								<img src="{{ twt.profile_img }}" class="media-object img-rounded" style="width:60px">
+							</div>
+							<div class="media-body">
+								<h4 class="media-heading">{{ twt.display_name }} (<a href="https://twitter.com/{{ twt.user_name }}" target="_blank">@{{ twt.user_name }})</a></h4>
+								<p class="text-justify text-gray"><em>{{ twt.tweet }}</em></p>
+							</div>
+						</div>
 					</div>
-					<div class="media-body">
-						<h4 class="media-heading">{{ twt.display_name }} (<a href="https://twitter.com/{{ twt.user_name }}" target="_blank">@{{ twt.user_name }})</a></h4>
-						<p>{{ twt.tweet }}</p>
-					</div>
+					<hr/>
+				{% endfor %}
 				</div>
 			</div>
-			<hr/>
-		{% endfor %}
+		</div>
 	</div>
 </body>
 </html>
