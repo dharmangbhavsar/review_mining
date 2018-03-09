@@ -1,7 +1,8 @@
+var csrf = $("#csrf_token").find("input").val();
 function initAutocomplete() {
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -26.577419, lng: 0},
-    zoom: 5,
+    center: {lat: 0, lng: 0},
+    zoom: 3,
     mapTypeId: 'roadmap'
   });
 
@@ -52,18 +53,11 @@ function initAutocomplete() {
         });
       //map.setStreetView(panorama);
       $("#map").remove();
-      
-      var csrf = $("#csrf_token").find("input").val();
-      $.ajax({
-        type: "POST",
-        url: "review_mining/get_reviews",
-        data: { name: name, lat: lat, lng: lng, csrfmiddlewaretoken: csrf },
-        success: function(response){
-          $("#reviews").html(response);
-          $("#reviews").show();
-          console.log(response);
-        }
-      });
+      redirect_url = "review_mining/get_reviews?name="+enc(name)+"&lat="+lat+"&lng="+lng;
+      window.location = redirect_url;
     });
   });
+}
+function enc(str){
+  return encodeURIComponent(str).replace(/%20/g,'+');
 }

@@ -9,7 +9,7 @@ from twitter import *
 import nltk, pickle, re, nltk.tag, nltk.data
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import brown, wordnet, stopwords
-
+from pprint import pprint
 import sys, csv, datetime
 
 #Migrated from FBVs to CBVs as CBVs handle get and post logic cleanly
@@ -27,19 +27,16 @@ class get_reviews(View):
 	template_name = "review_mining/get_reviews.html"
 
 	def get(self, request):
-		pass
-	
-	def post(self,request):
 		consumer_key = "DGh9KwPCvFwmOGHoBajHaCEIP"
 		consumer_secret = "h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc"
 		access_key = "963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP"
 		access_secret = "lp2Hu3FOdJ5Z563Isb7VCUtTk2UwH03LLummrYskunnd3"
 
-		post = request.POST
+		get = request.GET
 		
-		search_name = post.get('name')
-		latitude = float(post.get('lat'))
-		longitude = float(post.get('lng'))
+		search_name = get.get('name')
+		latitude = float(get.get('lat'))
+		longitude = float(get.get('lng'))
 		max_range = 1 			# search range in kilometres
 		num_results = 5			# minimum results to obtain
 		
@@ -47,26 +44,29 @@ class get_reviews(View):
 		        auth = OAuth(access_key, access_secret, consumer_key, consumer_secret))
 
 		result_count = 0
+		loop_cnt = 1000
 		last_id = None
 		all_tweets = []
-
-		while result_count <  num_results:
+		while result_count <  num_results and loop_cnt > 0:
 			query = twitter.search.tweets(q = "", geocode = "%f,%f,%dkm" % (latitude, longitude, max_range), count = 100, max_id = last_id)
 
 			for result in query["statuses"]:
 				if result["geo"]:
-					user = result["user"]["screen_name"]
-					text = result["text"]
-					latitude = result["geo"]["coordinates"][0]
-					longitude = result["geo"]["coordinates"][1]
+					tweet = result["text"]
+					display_name = result["user"]["name"]
+					user_name = result["user"]["screen_name"]
+					profile_img = result["user"]["profile_image_url_https"]
 
-					if self.is_related(text, search_name):
-						all_tweets.append({"user": user, "text": text, "lat": latitude, "lng": longitude })
+					if self.is_related(tweet, search_name):
+						all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img })
 						result_count += 1
 				last_id = result["id"]
-
+				loop_cnt -= 1
 			
 		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name})
+	
+	def post(self,request):
+		pass
 
 	def is_related(self, tweet, search):
 		lemmatizer = WordNetLemmatizer()
