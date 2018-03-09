@@ -197,8 +197,8 @@ for key in df['Sentence']:
 df['new'] = s
 print(df)
 pd.value_counts(df['new'].values, sort=False)
-ans = accuracy_score(df['Index'], df['new'])
-ans2 = precision_score(df['Index'], df['new'])
+ans = accuracy_score(df['Sentiment'], df['new'])
+ans2 = precision_score(df['Sentiment'], df['new'])
 df.to_csv("ans.csv")
 print("Accuracy", ans)
 print("Precision", ans2)
