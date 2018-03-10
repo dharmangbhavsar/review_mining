@@ -1,5 +1,5 @@
 # review_mining
-Microsoft API tested on only 2000 rows because it has a monthly limit of 5000 requests.
+Microsoft API tested on only 2000 rows because it has a monthly limit of 5000 requests and a limit of 1000 rows at a time.
 Google API had the same limit, I like Microsoft, chose Microsoft.
 Results are "almost similar". 
 
