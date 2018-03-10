@@ -164,3 +164,9 @@ while(total_count<needed_tweets):
 	#print("%d is the total amount of tweets received."%(total_count))
 csvfile.close()
 print("--- %s seconds ---" % (time.time() - start_time))
+
+
+
+#[6918 rows x 3 columns]
+#Accuracy 0.837236195432
+#Precision 0.894869638352
