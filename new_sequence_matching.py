@@ -19,7 +19,12 @@ for i in range(0,tweet_words):
 	all_words.append(t)
 #printing all works
 #print(all_words)
-print(difflib.get_close_matches(search, all_words, cutoff=0.7))
+ans = difflib.get_close_matches(search, all_words, cutoff=0.7)
+#Prints Yes if the search term is present
+if(len(ans) > 0):
+	print("Yes")
+else: 
+	print("No")
 print("------------------")
 #three = [' '.join([i,j,k]) for i,j,k in zip(words, words[1:], words[2:])]
 #print(three)
