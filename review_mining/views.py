@@ -37,14 +37,14 @@ class get_reviews(View):
 	template_name = "review_mining/get_reviews.html"
 
 	def get(self, request):
-		# consumer_key = "DGh9KwPCvFwmOGHoBajHaCEIP"
-		# consumer_secret = "h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc"
-		# access_key = "963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP"
-		# access_secret = "lp2Hu3FOdJ5Z563Isb7VCUtTk2UwH03LLummrYskunnd3"
-		consumer_key = "fDyXXSIZ2TIdmPUf6TmWZtxIB"
-		consumer_secret = "YD1Olf7sgYXdjOS8wbRz7WzBiR96SHy55B8F6ZiZMOv6HOvnlA"
-		access_key = "340750238-PMrhm6sDjQ7RpD6iW00VrTDFMN98dOUoCdbfkb8g"
-		access_secret = "jJjXCNKfXJJT1VUO1f6blNzeXwCPs89yzBauep5oyaK47"
+		consumer_key = "DGh9KwPCvFwmOGHoBajHaCEIP"
+		consumer_secret = "h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc"
+		access_key = "963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP"
+		access_secret = "lp2Hu3FOdJ5Z563Isb7VCUtTk2UwH03LLummrYskunnd3"
+		# consumer_key = "fDyXXSIZ2TIdmPUf6TmWZtxIB"
+		# consumer_secret = "YD1Olf7sgYXdjOS8wbRz7WzBiR96SHy55B8F6ZiZMOv6HOvnlA"
+		# access_key = "340750238-PMrhm6sDjQ7RpD6iW00VrTDFMN98dOUoCdbfkb8g"
+		# access_secret = "jJjXCNKfXJJT1VUO1f6blNzeXwCPs89yzBauep5oyaK47"
 
 		get = request.GET
 		
