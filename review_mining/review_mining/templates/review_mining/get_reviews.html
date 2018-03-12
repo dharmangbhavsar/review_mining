@@ -28,6 +28,18 @@
 	    .text-gray{
 	    	color: gray;
 	    }
+	    .modal, .modal-content, .modal-dialog, .modal-header, .modal-body{
+	    	background: transparent;
+	    	box-shadow: 0px !important;
+	    	border: 0px;
+	    }
+	    .modal, .modal-content, .modal-dialog{
+	    	height: 100%;
+	    	width: 100%;
+	    }
+	    #myModalContent{
+	    	box-shadow: 0px !important;
+	    }
     </style>
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'others/bootstrap/js/bootstrap.min.js' %}"></script>
@@ -95,6 +107,28 @@
 				{% endfor %}
 				</div>
 			</div>
+		</div>
+	</div>
+	<div>
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Nearby</button>
+		<!-- Modal -->
+		<div id="myModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog" style="color:white">
+
+		    <!-- Modal content-->
+		    <div class="modal-content" id="myModalContent">
+		      <div class="modal-header" >
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h3 class="modal-title text-center">Nearby similar places</h4>
+		      </div>
+		      <div class="modal-body">
+		        <button class="btn btn-primary">Sammys</button>
+		        <button class="btn btn-primary">XYz</button>
+		        <button class="btn btn-primary">ABC</button>
+		      </div>
+		    </div>
+
+		  </div>
 		</div>
 	</div>
 </body>
