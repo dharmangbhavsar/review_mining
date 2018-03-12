@@ -47,7 +47,7 @@ class get_reviews(View):
 		latitude = float(get.get('lat'))
 		longitude = float(get.get('lng'))
 		max_range = 1 			# search range in kilometres
-		num_results = 10		# minimum results to obtain
+		num_results = 0		# minimum results to obtain
 		
 		twitter = Twitter(
 		        auth = OAuth(access_key, access_secret, consumer_key, consumer_secret))
