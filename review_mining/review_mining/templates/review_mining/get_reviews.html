@@ -40,6 +40,13 @@
 	    #myModalContent{
 	    	box-shadow: 0px !important;
 	    }
+	    .related_place_div{
+	    	min-height: 100px;
+	    	cursor: pointer;
+	    }
+	    .place_description{
+	    	display: none;
+	    }
     </style>
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'others/bootstrap/js/bootstrap.min.js' %}"></script>
@@ -109,11 +116,12 @@
 			</div>
 		</div>
 	</div>
-	<div>
+	<div class="col-sm-8">
 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Nearby</button>
 		<!-- Modal -->
 		<div id="myModal" class="modal fade" role="dialog">
-		  <div class="modal-dialog" style="color:white">
+		  <div class="modal-dialog" style="color:white; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+">
 
 		    <!-- Modal content-->
 		    <div class="modal-content" id="myModalContent">
@@ -122,14 +130,48 @@
 		        <h3 class="modal-title text-center">Nearby similar places</h4>
 		      </div>
 		      <div class="modal-body">
-		        <button class="btn btn-primary">Sammys</button>
-		        <button class="btn btn-primary">XYz</button>
-		        <button class="btn btn-primary">ABC</button>
+		      	<div class="col-sm-4">
+			       	<div class="related_place_div">
+			       		<h4 class="place_name">Sammys</h4>
+			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
+			       	</div>
+			     </div>
+			     <div class="col-sm-4">
+			       	<div class="related_place_div">
+			       		<h4 class="place_name">Alpha</h4>
+			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
+			       	</div>
+			     </div>
+			     <div class="col-sm-4">
+			       	<div class="related_place_div">
+			       		<h4 class="place_name">Beta</h4>
+			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
+			       	</div>
+			     </div>
+			     <div class="col-sm-4">
+			       	<div class="related_place_div">
+			       		<h4 class="place_name">Gamma</h4>
+			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
+			       	</div>
+			     </div>
+			     <div class="col-sm-4">
+			       	<div class="related_place_div">
+			       		<h4 class="place_name">Zeta</h4>
+			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
+			       	</div>
+			     </div>
 		      </div>
 		    </div>
 
 		  </div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(".related_place_div").hover(function(){
+		    $(this).find(".place_description").fadeIn("slow");
+		    }, function(){
+		    $(this).find(".place_description").fadeOut("slow");
+		});
+	</script>
 </body>
 </html>
