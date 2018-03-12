@@ -32,18 +32,19 @@
 	    }
 	    .modal, .modal-content, .modal-dialog, .modal-header, .modal-body{
 	    	background: transparent;
-	    	box-shadow: 0px !important;
+	    	box-shadow: 0px 0px 0px rgba(0,0,0,.5) !important;
 	    	border: 0px;
 	    }
 	    .modal, .modal-content, .modal-dialog{
 	    	height: 100%;
 	    	width: 100%;
 	    }
-	    #myModalContent{
+	    .modal{
+	    	background-color: rgba(0, 0, 0, 0.2);
 	    	box-shadow: 0px !important;
 	    }
 	    .related_place_div{
-	    	min-height: 100px;
+	    	min-height: 150px;
 	    	cursor: pointer;
 	    }
 	    .place_description{
@@ -128,6 +129,7 @@
 							</p>
 						</div>
 						<div id="all_tweets_div" class="panel-body reviews_div">
+						{% if all_tweets %}
 						{% for twt in all_tweets %}
 							<div class="col-sm-12">
 								<div class="media">
@@ -149,6 +151,9 @@
 							</div>
 							<hr/>
 						{% endfor %}
+						{% else %}
+							<p class="h4">No reviews found!</p>
+						{% endif %}
 						</div>
 					</div>
 				</div>
@@ -168,6 +173,7 @@
 							</p>
 						</div>
 						<div id="all_tweets_div" class="panel-body reviews_div">
+						{% if google_ratings %}
 						{% for r in google_ratings %}
 							<div class="col-sm-12">
 								<div class="media">
@@ -185,6 +191,9 @@
 							</div>
 							<hr/>
 						{% endfor %}
+						{% else %}
+							<p class="h4">No reviews found!</p>
+						{% endif %}
 						</div>
 					</div>
 				</div>
@@ -193,7 +202,7 @@
 		
 	</div>
 	<div class="col-sm-8">
-		<button type="button" id="fixedbutton" class="btn btn-info" style="align-self: center;" data-toggle="modal" data-target="#myModal">Check Out Nearby Places</button>
+		<button type="button" id="fixedbutton" class="btn btn-info" style="align-self: center;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-map-marker"></span> Recommended Places</button>
 		<!-- Modal -->
 		<div id="myModal" class="modal fade" role="dialog">
 		  <div class="modal-dialog" style="color:white; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
@@ -201,8 +210,8 @@
 		    <!-- Modal content-->
 		    <div class="modal-content" id="myModalContent">
 		      <div class="modal-header" >
-		        <button type="button" class="close" data-dismiss="modal">&times;</button>
-		        <h3 class="modal-title text-center">Other Places You Could Consider ...</h4>
+		        <button type="button" class="close" data-dismiss="modal" style="font-size: 36px; color: white">&times;</button>
+		        <h3 class="modal-title text-center">Nearby places you should consider!</h4>
 		      </div>
 		      <div class="modal-body">
 		      	{% for place in all_nearby_places %}
@@ -210,14 +219,18 @@
 				       	<div class="related_place_div">
 				       		<div class="media">
 								<div class="media-left">
-									<img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={{ place.image }}&key={{ key }}" class="media-object img-rounded" style="width:60px"/>
+									{% if place.image %}
+									<img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={{ place.image }}&key={{ key }}" class="media-object img-rounded" style="width:60px; height: 60px"/>
+									{% else %}
+									<img src="https://www.mountaineers.org/images/placeholder-images/RoutesPlacesDefaultImage.jpg" class="media-object img-rounded" style="width:60px; height: 60px"/>
+									{% endif%}
 								</div>
 								<div class="media-body">
 									
 									<div class="rate_parent">
 										<h4 class="media-heading"><a href="review_mining/get_reviews?name={{ place.name }}&lat={{ place.location.lat }}&lng={{ place.location.lng }}&type={{ place.type }}" target="_blank">{{ place.name }}</a></h4>
-										<div class="pull-left">
-											<div class="rate_div" rating="{{ place.rating }}"></div>
+										<div class="">
+											<div class="rate_modal" rating="{{ place.rating }}"></div>
 										</div>
 										<p class="h5">{{ place.address }}</p>
 									</div>
@@ -243,14 +256,30 @@
 	  $(".rate_div").each(function()
 	  	{
 	  		var r = $(this).attr('rating');
+	  		if(r == null || r == undefined || r == "")
+	  			r = 0
 	  		$(this).rateYo({
 	  			rating: r,
 	  			starWidth: "14px",
-	  			ratedFill: "0da3e2",
+	  			ratedFill: "black",
 	  			readOnly: true
 	  		})
 	  	});
-		 
+	  $(".rate_modal").each(function()
+	  	{
+	  		var r = $(this).attr('rating');
+	  		if(r == null || r == undefined || r == "")
+	  			r = 0
+	  		$(this).rateYo({
+	  			rating: r,
+	  			starWidth: "16px",
+	  			ratedFill: "#6492db",
+	  			readOnly: true
+	  		})
+	  	});
+	  	//$(document).ready(functio)
+		//$(".gm-iv-address-link").css('top','35px');
+		//alert($(".gm-iv-address-link").css('top'));
 	</script>
 </body>
 </html>

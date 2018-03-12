@@ -3,7 +3,9 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-image: url('../img/bg.png');
+  background: #56CCF2;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   background-size:100% 100%;
   background-repeat: no-repeat;
 }
@@ -62,13 +64,27 @@ html, body {
   width: 400px;
   height: 50px; 
   margin-left: 35%; 
-  margin-top: 10%
+  margin-top: 2%
 }
 
+#title_div{
+  margin-top: 15%;
+}
+#title_div h1{
+    font-size: 65px;
+    color: white;
+    font-family: "Courier New";
+}
+#suggested_places{
+  margin-top: 2%;
+}
+#suggested_places div{
+  border: 2px solid white;
+  box-shadow: -1px 1px 1px gray;
+}
 #search_input:focus {
   border-color: #4d90fe;
 }
-
 #title {
   color: #fff;
   background-color: #4d90fe;

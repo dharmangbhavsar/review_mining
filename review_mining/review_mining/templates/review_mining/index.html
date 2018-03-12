@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Search for reviews</title>
+    <title>Triview</title>
     {% load staticfiles %}
     <base href="http://{{ request.get_host }}/"></base>
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
@@ -17,9 +17,29 @@
          async defer></script>
   </head>
   <body>
-    <input id="search_input" class="controls" type="text" placeholder="Search Here.."/>
+  	<div id="title_div" class="text-center">
+  		<h1 style><i class="fa fa-twitter"></i> TRIVIEW</h1>
+  	</div>
+  	<input id="search_input" class="controls" type="text" placeholder="Search Here.."/>
     <div id="map" style="display: none"></div>
-    <div id="reviews"></div>
+    <div id="suggested_places" class="col-sm-12">
+    	<a href="review_mining/get_reviews?name=Golden+Gate+Bridge&lat=37.8199286&lng=-122.47825510000001&type=point_of_interest">
+	    	<div class="col-sm-3" style="background-image: url('{% static 'img/sanfran.jpg' %}'); height: 200px;  border-radius: 15px; margin: 0% 2%; background-size: cover;">
+	    		<h3 class="text-center" style="margin-top: 30%; color: black; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">Golden Gate Bridge</h3>
+	    	</div>
+	    </a>
+	    <a href="review_mining/get_reviews?name=One+World+Trade+Center&lat=40.7130082&lng=-74.01316889999998&type=premise">
+	    	<div class="col-sm-3" style="background-image: url('{% static 'img/wtc.jpg' %}'); height: 200px;  border-radius: 15px; margin: 0% 8%; background-size: cover;">
+	    		<h3 class="text-center" style="margin-top: 30%; color: black; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">One World Trade Centre</h3>
+	    	</div>
+	    </a>
+	    <a href="review_mining/get_reviews?name=Sydney+Opera+House&lat=-33.8567844&lng=151.21529669999995&type=point_of_interest">
+	    	<div class="col-sm-3" style="background-image: url('{% static 'img/op.jpg' %}'); height: 200px;  border-radius: 15px; margin: 0% 2%; background-size: cover;">
+	    		<h3 class="text-center" style="margin-top: 30%; color: black; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">Sydney Opera House</h3>
+	    	</div>
+	    </a>
+    </div>
+
     <div id="csrf_token">{% csrf_token %}</div>
   </body>
 </html>

@@ -50,14 +50,14 @@ class get_reviews(View):
 		location_type = get.get('type')
 
 		max_range = 1 			# search range in kilometres
-		num_results = 10		# minimum results to obtain
+		num_results = 5			# minimum results to obtain
 		
 		twitter = Twitter(
 		        auth = OAuth(access_key, access_secret, consumer_key, consumer_secret))
 
 		result_count = 0
 		t_plus, g_plus, t_minus, g_minus =0,0,0,0
-		loop_cnt = 1000
+		loop_cnt = 5
 		last_id = None
 		all_tweets = []
 
@@ -82,7 +82,7 @@ class get_reviews(View):
 						rating = float("{0:.1f}".format(((rating+1)/2)*5))
 
 						if self.is_related(tweet, search_name):
-							if rating > 3:
+							if rating > 2:
 								t_plus +=1
 							else:
 								t_minus+=1
@@ -125,7 +125,7 @@ class get_reviews(View):
 					
 					rating.append({"text": l, "rating": k['rating'], "user_name": k['author_name'], "img": k['profile_photo_url'], 'a_url': k['author_url']})
 
-					if k['rating'] > 3:
+					if k['rating'] > 2:
 						g_plus +=1
 					else:
 						g_minus+=1
@@ -134,10 +134,7 @@ class get_reviews(View):
 		if result_count != 0:
 			g_plus = int(g_plus*100/result_count)
 			g_minus = 100 - g_plus
-						#print("\n")
-				#print(rating)
-
-
+						
 		latlong = {"lat":latitude, "lng":longitude}
 		#main Google places query. 
 		query_result = place.nearby_search(lat_lng = latlong, radius = 2000, rankby = "prominence", type = location_type)
@@ -163,8 +160,15 @@ class get_reviews(View):
 			    #place.rating or place._rating
 			    #place.photos[0].photo_reference
 			    # The following method has to make a further API call.
-			    all_nearby_places.append({'image': place.photos[0].photo_reference, 'name': place.name, 'rating': place.rating, 'location': place.geo_location, 'address': place.formatted_address, 'type': place.types[0] })
 
+			    if len(place.photos) > 0:
+			    	all_nearby_places.append({'image': place.photos[0].photo_reference, 'name': place.name, 'rating': place.rating, 'location': place.geo_location, 'address': place.formatted_address, 'type': place.types[0] })
+			    else:
+			    	all_nearby_places.append({'name': place.name, 'rating': place.rating, 'location': place.geo_location, 'address': place.formatted_address, 'type': place.types[0] })
+
+			    if not place.rating:
+			    	all_nearby_places[len(all_nearby_places) - 1]['rating'] = 0
+		all_nearby_places = sorted(all_nearby_places, key=lambda k: k['rating'], reverse = True)
 		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': "AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ", "all_nearby_places": all_nearby_places})
 	
 	def post(self,request):
