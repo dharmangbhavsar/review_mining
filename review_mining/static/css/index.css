@@ -1,12 +1,10 @@
 /* Optional: Makes the sample page fill the window. */
-html, body {
+html {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: #56CCF2;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background-size:100% 100%;
+  background-image: url('../img/bg.jpg');
+  background-size:cover;
   background-repeat: no-repeat;
 }
 #description {
@@ -55,7 +53,6 @@ html, body {
 }
 
 #search_input {
-  background-color: #fff;
   font-family: Roboto;
   font-size: 15px;
   font-weight: 300;
@@ -69,11 +66,14 @@ html, body {
 
 #title_div{
   margin-top: 15%;
+  background: transparent !important;
 }
 #title_div h1{
     font-size: 65px;
     color: white;
     font-family: "Courier New";
+    font-weight: 550;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 #suggested_places{
   margin-top: 2%;
