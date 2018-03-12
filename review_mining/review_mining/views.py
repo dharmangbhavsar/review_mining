@@ -11,6 +11,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import brown, wordnet, stopwords
 from pprint import pprint
 import sys, csv, datetime
+from textblob import TextBlob
 
 #Migrated from FBVs to CBVs as CBVs handle get and post logic cleanly
 #----DASHBOARD----
@@ -62,9 +63,11 @@ class get_reviews(View):
 					display_name = result["user"]["name"]
 					user_name = result["user"]["screen_name"]
 					profile_img = result["user"]["profile_image_url_https"]
+					setup = TextBlob(ans)
+					sentiment_score = setup.sentiment.polarity
 
 					if self.is_related(tweet, search_name):
-						all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img })
+						all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img, "sentiment": ((sentiment_score+1)/2) })
 						result_count += 1
 				last_id = result["id"]
 				loop_cnt -= 1
@@ -88,5 +91,4 @@ class get_reviews(View):
 			if w in words:
 				flag = True
 				break
-
 		return flag
