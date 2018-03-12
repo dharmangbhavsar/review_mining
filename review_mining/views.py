@@ -37,10 +37,14 @@ class get_reviews(View):
 	template_name = "review_mining/get_reviews.html"
 
 	def get(self, request):
-		consumer_key = "DGh9KwPCvFwmOGHoBajHaCEIP"
-		consumer_secret = "h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc"
-		access_key = "963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP"
-		access_secret = "lp2Hu3FOdJ5Z563Isb7VCUtTk2UwH03LLummrYskunnd3"
+		# consumer_key = "DGh9KwPCvFwmOGHoBajHaCEIP"
+		# consumer_secret = "h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc"
+		# access_key = "963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP"
+		# access_secret = "lp2Hu3FOdJ5Z563Isb7VCUtTk2UwH03LLummrYskunnd3"
+		consumer_key = "fDyXXSIZ2TIdmPUf6TmWZtxIB"
+		consumer_secret = "YD1Olf7sgYXdjOS8wbRz7WzBiR96SHy55B8F6ZiZMOv6HOvnlA"
+		access_key = "340750238-PMrhm6sDjQ7RpD6iW00VrTDFMN98dOUoCdbfkb8g"
+		access_secret = "jJjXCNKfXJJT1VUO1f6blNzeXwCPs89yzBauep5oyaK47"
 
 		get = request.GET
 		
@@ -97,7 +101,7 @@ class get_reviews(View):
 			t_plus = int(t_plus*100/result_count)
 			t_minus = 100 - t_plus
 
-		API_KEY = 'AIzaSyBdx5s56pNhrwTfCoqxqlUk2YjABXJub9U'
+		API_KEY = 'AIzaSyBO93Qnw2QDYkMhyQOuabTMXPZw0LMPL7k'
 
 		rating = []
 		user_input = search_name
@@ -170,7 +174,7 @@ class get_reviews(View):
 			    	all_nearby_places[len(all_nearby_places) - 1]['rating'] = 0
 
 		all_nearby_places = sorted(all_nearby_places, key=lambda k: k['rating'], reverse = True)
-		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': "AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ", "all_nearby_places": all_nearby_places})
+		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': "AIzaSyBO93Qnw2QDYkMhyQOuabTMXPZw0LMPL7k", "all_nearby_places": all_nearby_places})
 	
 	def post(self,request):
 		pass
