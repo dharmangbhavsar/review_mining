@@ -80,6 +80,14 @@
 							<div class="media-body">
 								<h4 class="media-heading">{{ twt.display_name }} (<a href="https://twitter.com/{{ twt.user_name }}" target="_blank">@{{ twt.user_name }})</a></h4>
 								<p class="text-justify text-gray"><em>{{ twt.tweet }}</em></p>
+								<div class="col-sm-12">
+									<div class="progress">
+										<div class="progress-bar progress-bar-{{ twt.s_class }}" role="progressbar" aria-valuenow="{{twt.sentiment_score}}"
+										aria-valuemin="0" aria-valuemax="100" style="width:{{ twt.sentiment_score }}%">
+											{{ twt.sentiment_score }}%
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

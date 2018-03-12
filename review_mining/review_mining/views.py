@@ -39,13 +39,13 @@ class get_reviews(View):
 		latitude = float(get.get('lat'))
 		longitude = float(get.get('lng'))
 		max_range = 1 			# search range in kilometres
-		num_results = 10		# minimum results to obtain
+		num_results = 5		# minimum results to obtain
 		
 		twitter = Twitter(
 		        auth = OAuth(access_key, access_secret, consumer_key, consumer_secret))
 
 		result_count = 0
-		loop_cnt = 1000
+		loop_cnt = 2
 		last_id = None
 		all_tweets = []
 
@@ -63,11 +63,19 @@ class get_reviews(View):
 					display_name = result["user"]["name"]
 					user_name = result["user"]["screen_name"]
 					profile_img = result["user"]["profile_image_url_https"]
-					setup = TextBlob(ans)
+					setup = TextBlob(tweet)
 					sentiment_score = setup.sentiment.polarity
+					if sentiment_score > 0.2:
+						s_class = "success"
+					elif sentiment_score > -0.2:
+						s_class = "warning"
+					else:
+						s_class = "danger"
+
+					sentiment_score = float("{0:.2f}".format(((sentiment_score+1)/2)*100))
 
 					if self.is_related(tweet, search_name):
-						all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img, "sentiment": ((sentiment_score+1)/2) })
+						all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img, "sentiment_score": sentiment_score, "s_class": s_class })
 						result_count += 1
 				last_id = result["id"]
 				loop_cnt -= 1
