@@ -3,7 +3,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-image: url('../img/bg.jpg');
+  background-image: url('../img/bg.png');
   background-size:100% 100%;
   background-repeat: no-repeat;
 }
@@ -62,7 +62,7 @@ html, body {
   width: 400px;
   height: 50px; 
   margin-left: 35%; 
-  margin-top: 20%
+  margin-top: 10%
 }
 
 #search_input:focus {

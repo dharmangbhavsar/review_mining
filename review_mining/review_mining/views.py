@@ -10,9 +10,10 @@ import nltk, pickle, re, nltk.tag, nltk.data
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import brown, wordnet, stopwords
 from pprint import pprint
-import sys, csv, datetime
-import six 
+import sys, csv, datetime, json, urllib.request, codecs, io
+import six, difflib
 from googleplaces import GooglePlaces, types, lang
+from textblob import TextBlob
 
 #So that Python doesnt get into Codec Errors.
 def strip_non_ascii(string):
@@ -46,13 +47,16 @@ class get_reviews(View):
 		search_name = get.get('name')
 		latitude = float(get.get('lat'))
 		longitude = float(get.get('lng'))
+		location_type = get.get('type')
+
 		max_range = 1 			# search range in kilometres
-		num_results = 0		# minimum results to obtain
+		num_results = 10		# minimum results to obtain
 		
 		twitter = Twitter(
 		        auth = OAuth(access_key, access_secret, consumer_key, consumer_secret))
 
 		result_count = 0
+		t_plus, g_plus, t_minus, g_minus =0,0,0,0
 		loop_cnt = 1000
 		last_id = None
 		all_tweets = []
@@ -68,42 +72,31 @@ class get_reviews(View):
 			for result in query["statuses"]:
 				if result["geo"]:
 					tweet = result["text"]
-					display_name = result["user"]["name"]
-					user_name = result["user"]["screen_name"]
-					profile_img = result["user"]["profile_image_url_https"]
+					
+					if result['lang'] == "en":
+						display_name = result["user"]["name"]
+						user_name = result["user"]["screen_name"]
+						profile_img = result["user"]["profile_image_url_https"]
+						setup = TextBlob(tweet)
+						rating = setup.sentiment.polarity
+						rating = float("{0:.1f}".format(((rating+1)/2)*5))
 
-					if self.is_related(tweet, search_name):
-						all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img })
-						result_count += 1
+						if self.is_related(tweet, search_name):
+							if rating > 3:
+								t_plus +=1
+							else:
+								t_minus+=1
+							all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img, "rating": rating })
+							result_count += 1
+
+
 				last_id = result["id"]
 				loop_cnt -= 1
-			
-		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude})
-	
-	def post(self,request):
-		pass
-
-	def is_related(self, tweet, search):
-		lemmatizer = WordNetLemmatizer()
-		s = re.sub('[^0-9a-zA-Z ]+', '', search).lower()
-		words = set()
-		for w in nltk.word_tokenize(s):
-			words.add(lemmatizer.lemmatize(w))
 		
-		flag = False
-		t = re.sub('[^0-9a-zA-Z ]+', '', tweet).lower()
+		if result_count != 0:		
+			t_plus = int(t_plus*100/result_count)
+			t_minus = 100 - t_plus
 
-		for w in nltk.word_tokenize(t):
-			if w in words:
-				flag = True
-				break
-
-		return flag
-
-
-		#---------------------------------------------------------------------------------------------------------------------
-		#Now Starts Google Places Reviews.
-		#---------------------------------------------------------------------------------------------------------------------
 		API_KEY = 'AIzaSyBdx5s56pNhrwTfCoqxqlUk2YjABXJub9U'
 
 		user_input = search_name
@@ -113,6 +106,7 @@ class get_reviews(View):
 			#print (loc.name)
 			#print (loc.geo_location)
 			loc.get_details()
+			result_count = 0
 			#print (loc.rating) 
 			#place.text_search
 			#rating has the reviews, author_name and ratings in a dictionary style.
@@ -128,6 +122,94 @@ class get_reviews(View):
 					#f.write(x)
 					#print(l)
 					#Appending ratings.
-					rating.append({"rating": k['rating'], "user_name": k['author_name'], "text": l})
-					#print("\n")
-			#print(rating)
+					
+					rating.append({"text": l, "rating": k['rating'], "user_name": k['author_name'], "img": k['profile_photo_url'], 'a_url': k['author_url']})
+
+					if k['rating'] > 3:
+						g_plus +=1
+					else:
+						g_minus+=1
+					result_count += 1
+
+		if result_count != 0:
+			g_plus = int(g_plus*100/result_count)
+			g_minus = 100 - g_plus
+						#print("\n")
+				#print(rating)
+
+
+		latlong = {"lat":latitude, "lng":longitude}
+		#main Google places query. 
+		query_result = place.nearby_search(lat_lng = latlong, radius = 2000, rankby = "prominence", type = location_type)
+		all_nearby_places = []
+		limit = 5
+		for place in query_result.places:
+		    # Returned places from a query are place summaries.
+		    if limit <= 0: 
+		    	break
+		    if place.name != search_name:
+			    #pprint (place.geo_location)
+			    #pprint (place.reference)
+			    pass
+			    # Referencing any of the attributes below, prior to making a call to
+			    # get_details() will raise a googleplaces.GooglePlacesAttributeError.
+			    print("-->")
+			    place.get_details()
+			    pprint(vars(place))
+			    #place.rating or place._rating
+			    #place.photos[0].photo_reference
+			    # The following method has to make a further API call.
+			    all_nearby_places.append({'image': place.photos[0].photo_reference, 'name': place.name, 'rating': place.rating})
+			    
+			    #pprint (place.details) # A dict matching the JSON response from Google.
+			    #for key in place.details:
+			     #   print(key)
+			    #lul = json.dumps(place.details)
+		limit -= 1
+		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': API_KEY})
+	
+	def post(self,request):
+		pass
+
+	def is_related(self, text, search):
+		words = text.split()
+		word = search.split()
+		tweet_words = len(words)
+		query_words = len(word)
+		#all_words contains the set of words equal to the search term
+		all_words = []
+		for i in range(0,tweet_words):
+			t = ""
+			for j in range(0,query_words):
+				if((i+j)<tweet_words):
+					t += words[i+j]
+					t+=" "
+			all_words.append(t)
+		#printing all works
+		#print(all_words)
+		ans = difflib.get_close_matches(search, all_words, cutoff=0.7)
+		#Prints Yes if the search term is present
+		if(len(ans) > 0):
+			return True
+		else: 
+			return False
+		# lemmatizer = WordNetLemmatizer()
+		# s = re.sub('[^0-9a-zA-Z ]+', '', search).lower()
+		# words = set()
+		# for w in nltk.word_tokenize(s):
+		# 	words.add(lemmatizer.lemmatize(w))
+		
+		# flag = False
+		# t = re.sub('[^0-9a-zA-Z ]+', '', tweet).lower()
+
+		# for w in nltk.word_tokenize(t):
+		# 	if w in words:
+		# 		flag = True
+		# 		break
+
+		# return flag
+
+
+	#---------------------------------------------------------------------------------------------------------------------
+	#Now Starts Google Places Reviews.
+	#---------------------------------------------------------------------------------------------------------------------

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{% static 'others/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
     <link rel="stylesheet" href="{% static 'css/ionicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rating.css' %}">
+
     <style type="text/css">
     	html, body {
 	        height: 100%;
@@ -47,8 +49,22 @@
 	    .place_description{
 	    	display: none;
 	    }
+	    .rate_parent{
+	    	display: inline-block;
+	    }
+	    .block_head{
+	    	font-size: 150%;
+	    	margin: 10px 10px;
+	    }
+	    #fixedbutton {
+		    position: fixed;
+		    top: 3px;
+		    right: 10px; 
+		}
     </style>
     <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/rating.js' %}"></script>
+    <script src="{% static 'js/jquery.collapser.min.js' %}"></script>
     <script src="{% static 'others/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'others/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
     <script type="text/javascript">
@@ -70,9 +86,14 @@
 			map.setStreetView(panorama);
 		}
 		$(function(){
-			$('#all_tweets_div').slimScroll({
-		        height: '550px'
+			$('.reviews_div').slimScroll({
+		        height: '520px'
 		    });
+
+			$('.g_rev_txt').collapser({
+				mode: 'chars',
+				truncate: 75
+			});
 		});
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ&libraries=places&callback=initAutocomplete"
@@ -84,53 +105,95 @@
   		<div id="pano" class="col-sm-8">
   			
   		</div>
-		<div id="twitter_reviews" class="col-sm-4">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<p class="h3 text-center">
-						Twitter reviews
-						<span class="text-success">
-							<span class="glyphicon glyphicon-triangle-top"></span>
-							<span> 45</span>
-						</span>
-						<span class="text-danger">
-							<span class="glyphicon glyphicon-triangle-bottom"></span>
-							<span> 15</span>
-						</span>
-					</p>
-				</div>
-				<div id="all_tweets_div" class="panel-body">
-					<div>
-
-					</div>
-				{% for twt in all_tweets %}
-					<div class="col-sm-12">
-						<div class="media">
-							<div class="media-left">
-								<img src="{{ twt.profile_img }}" class="media-object img-rounded" style="width:60px"/>
-							</div>
-							<div class="media-body">
-								<h4 class="media-heading">{{ twt.display_name }} (<a href="https://twitter.com/{{ twt.user_name }}" target="_blank">@{{ twt.user_name }})</a></h4>
-								<p class="text-justify text-gray"><em>{{ twt.tweet }}</em></p>
-								<div class="col-sm-12">
-									<div class="progress">
-										<div class="progress-bar progress-bar-{{ twt.s_class }}" role="progressbar" aria-valuenow="{{twt.sentiment_score}}"
-										aria-valuemin="0" aria-valuemax="100" style="width:{{ twt.sentiment_score }}%">
-											{{ twt.sentiment_score }}%
-										</div>
+  		<div class="col-sm-4">
+  			<ul class="nav nav-tabs">
+			  	<li class="tweet_symbol active"><a data-toggle="tab" href="#twitter_reviews"><span><i class="fa fa-twitter"></i></span></a></li>
+  				<li class="google_symbol"><a data-toggle="tab" href="#google_reviews"><span><i class="fa fa-google"></i></span></a></li>
+			  
+			</ul>
+			<div class="tab-content">
+				<div id="twitter_reviews" class="tab-pane fade in active">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<p class="block_head text-center">
+								Twitter reviews
+								<span class="text-success">
+									<span class="glyphicon glyphicon-triangle-top"></span>
+									<span> {{t_plus}}</span>
+								</span>
+								<span class="text-danger">
+									<span class="glyphicon glyphicon-triangle-bottom"></span>
+									<span> {{t_minus}}</span>
+								</span>
+							</p>
+						</div>
+						<div id="all_tweets_div" class="panel-body reviews_div">
+						{% for twt in all_tweets %}
+							<div class="col-sm-12">
+								<div class="media">
+									<div class="media-left">
+										<img src="{{ twt.profile_img }}" class="media-object img-rounded" style="width:60px"/>
+									</div>
+									<div class="media-body">
+										
+										<div class="rate_parent">
+									<h4 class="media-heading">{{ twt.display_name }} (<a href="https://twitter.com/{{ twt.user_name }}" target="_blank">@{{ twt.user_name }})</a></h4>
+									<div class="pull-left">
+										<div class="rate_div" rating="{{ twt.rating }}"></div>
+									</div>
+								</div>	
+										<p class="text-justify text-gray"><em>{{ twt.tweet }}</em></p>
+										
 									</div>
 								</div>
 							</div>
+							<hr/>
+						{% endfor %}
 						</div>
 					</div>
-					<hr/>
-				{% endfor %}
+				</div>
+				<div id="google_reviews" class="tab-pane fade">
+					<div class="panel panel-danger">
+						<div class="panel-heading">
+							<p class="block_head text-center">
+								Google reviews
+								<span class="text-success">
+									<span class="glyphicon glyphicon-triangle-top"></span>
+									<span> {{g_plus}}</span>
+								</span>
+								<span class="text-danger">
+									<span class="glyphicon glyphicon-triangle-bottom"></span>
+									<span> {{g_minus}}</span>
+								</span>
+							</p>
+						</div>
+						<div id="all_tweets_div" class="panel-body reviews_div">
+						{% for r in google_ratings %}
+							<div class="col-sm-12">
+								<div class="media">
+									<div class="media-left">
+										<img src="{{ r.img }}" class="media-object img-rounded" style="width:60px"/>
+									</div>
+									<div class="media-body">
+										<div class="rate_parent">
+											<h4 class="media-heading"><a href="{{a_url}}"" target="_blank">{{ r.user_name }}</a></h4>
+												<div class="rate_div" rating="{{ r.rating }}"></div>
+										</div>	
+										<p class="text-justify text-gray g_rev_txt"><em>{{ r.text }}</em></p>
+									</div>
+								</div>						
+							</div>
+							<hr/>
+						{% endfor %}
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+  		</div>
+		
 	</div>
 	<div class="col-sm-8">
-		<button type="button" class="btn btn-info btn-lg" style="align-self: center;" data-toggle="modal" data-target="#myModal">Check Out Nearby Places</button>
+		<button type="button" id="fixedbutton" class="btn btn-info" style="align-self: center;" data-toggle="modal" data-target="#myModal">Check Out Nearby Places</button>
 		<!-- Modal -->
 		<div id="myModal" class="modal fade" role="dialog">
 		  <div class="modal-dialog" style="color:white; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
@@ -184,6 +247,18 @@
 		    }, function(){
 		    $(this).find(".place_description").fadeOut("slow");
 		});
+
+	  $(".rate_div").each(function()
+	  	{
+	  		var r = $(this).attr('rating');
+	  		$(this).rateYo({
+	  			rating: r,
+	  			starWidth: "14px",
+	  			ratedFill: "0da3e2",
+	  			readOnly: true
+	  		})
+	  	});
+		 
 	</script>
 </body>
 </html>

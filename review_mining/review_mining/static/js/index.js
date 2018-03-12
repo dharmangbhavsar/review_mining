@@ -53,7 +53,7 @@ function initAutocomplete() {
         });
       //map.setStreetView(panorama);
       $("#map").remove();
-      redirect_url = "review_mining/get_reviews?name="+enc(name)+"&lat="+lat+"&lng="+lng;
+      redirect_url = "review_mining/get_reviews?name="+enc(name)+"&lat="+lat+"&lng="+lng+"&type="+type;
       window.location = redirect_url;
     });
   });
