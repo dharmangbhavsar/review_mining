@@ -11,7 +11,15 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import brown, wordnet, stopwords
 from pprint import pprint
 import sys, csv, datetime
-from textblob import TextBlob
+import six 
+from googleplaces import GooglePlaces, types, lang
+
+#So that Python doesnt get into Codec Errors.
+def strip_non_ascii(string):
+    #removing the non ascii characters from the string because Python has a lot of encoding problems
+    ''' Returns the string without non ASCII characters'''
+    stripped = (c for c in string if 0 < ord(c) < 127)
+    return ''.join(stripped)
 
 #Migrated from FBVs to CBVs as CBVs handle get and post logic cleanly
 #----DASHBOARD----
@@ -39,13 +47,13 @@ class get_reviews(View):
 		latitude = float(get.get('lat'))
 		longitude = float(get.get('lng'))
 		max_range = 1 			# search range in kilometres
-		num_results = 5		# minimum results to obtain
+		num_results = 10		# minimum results to obtain
 		
 		twitter = Twitter(
 		        auth = OAuth(access_key, access_secret, consumer_key, consumer_secret))
 
 		result_count = 0
-		loop_cnt = 2
+		loop_cnt = 1000
 		last_id = None
 		all_tweets = []
 
@@ -63,19 +71,9 @@ class get_reviews(View):
 					display_name = result["user"]["name"]
 					user_name = result["user"]["screen_name"]
 					profile_img = result["user"]["profile_image_url_https"]
-					setup = TextBlob(tweet)
-					sentiment_score = setup.sentiment.polarity
-					if sentiment_score > 0.2:
-						s_class = "success"
-					elif sentiment_score > -0.2:
-						s_class = "warning"
-					else:
-						s_class = "danger"
-
-					sentiment_score = float("{0:.2f}".format(((sentiment_score+1)/2)*100))
 
 					if self.is_related(tweet, search_name):
-						all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img, "sentiment_score": sentiment_score, "s_class": s_class })
+						all_tweets.append({"tweet": tweet, "display_name": display_name, "user_name": user_name, "profile_img": profile_img })
 						result_count += 1
 				last_id = result["id"]
 				loop_cnt -= 1
@@ -99,4 +97,37 @@ class get_reviews(View):
 			if w in words:
 				flag = True
 				break
+
 		return flag
+
+
+		#---------------------------------------------------------------------------------------------------------------------
+		#Now Starts Google Places Reviews.
+		#---------------------------------------------------------------------------------------------------------------------
+		API_KEY = 'AIzaSyBdx5s56pNhrwTfCoqxqlUk2YjABXJub9U'
+
+		user_input = search_name
+		place = GooglePlaces(API_KEY)
+		result = place.text_search(query= user_input)	#calling text search on a particular keyword
+		for loc in result.places:	#getting details about the place
+			#print (loc.name)
+			#print (loc.geo_location)
+			loc.get_details()
+			#print (loc.rating) 
+			#place.text_search
+			#rating has the reviews, author_name and ratings in a dictionary style.
+			rating = []
+			#Getting details
+			data = loc.details
+			if 'reviews' in data.keys():
+				for k in data['reviews']:
+					#Cleaning tweets.
+					x = strip_non_ascii(str(k))
+					l = strip_non_ascii(str(k['text']))
+					#print(k['rating'],": ",l)
+					#f.write(x)
+					#print(l)
+					#Appending ratings.
+					rating.append({"rating": k['rating'], "user_name": k['author_name'], "text": l})
+					#print("\n")
+			#print(rating)
