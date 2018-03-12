@@ -99,6 +99,7 @@ class get_reviews(View):
 
 		API_KEY = 'AIzaSyBdx5s56pNhrwTfCoqxqlUk2YjABXJub9U'
 
+		rating = []
 		user_input = search_name
 		place = GooglePlaces(API_KEY)
 		result = place.text_search(query= user_input)	#calling text search on a particular keyword
@@ -110,7 +111,6 @@ class get_reviews(View):
 			#print (loc.rating) 
 			#place.text_search
 			#rating has the reviews, author_name and ratings in a dictionary style.
-			rating = []
 			#Getting details
 			data = loc.details
 			if 'reviews' in data.keys():
@@ -168,6 +168,7 @@ class get_reviews(View):
 
 			    if not place.rating:
 			    	all_nearby_places[len(all_nearby_places) - 1]['rating'] = 0
+
 		all_nearby_places = sorted(all_nearby_places, key=lambda k: k['rating'], reverse = True)
 		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': "AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ", "all_nearby_places": all_nearby_places})
 	

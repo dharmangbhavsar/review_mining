@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html style="height: 100%; padding: 0px; margin: 0px">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Search for reviews</title>
+    {% load staticfiles %}
+    <base href="http://{{ request.get_host }}/"></base>
+    <link rel="stylesheet" href="{% static 'others/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ionicons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rating.css' %}">
+
+    <style type="text/css">
+    	html, body {
+	        height: 100%;
+	    }
+    	hr {
+		  border: 0;
+		  clear:both;
+		  display:block;
+		  width: 96%;               
+		  background-color:gray;
+		  height: 1px;
+		}
+		#pano {
+	        float: left;
+	        height: 100%;
+	    }
+	    .text-gray{
+	    	color: gray;
+	    }
+	    .modal, .modal-content, .modal-dialog, .modal-header, .modal-body{
+	    	background: transparent;
+	    	box-shadow: 0px 0px 0px rgba(0,0,0,.5) !important;
+	    	border: 0px;
+	    }
+	    .modal, .modal-content, .modal-dialog{
+	    	height: 100%;
+	    	width: 100%;
+	    }
+	    .modal{
+	    	background-color: rgba(0, 0, 0, 0.2);
+	    	box-shadow: 0px !important;
+	    }
+	    .related_place_div{
+	    	min-height: 150px;
+	    	cursor: pointer;
+	    }
+	    .place_description{
+	    	display: none;
+	    }
+	    .rate_parent{
+	    	display: inline-block;
+	    }
+	    .block_head{
+	    	font-size: 150%;
+	    	margin: 10px 10px;
+	    }
+	    /*#fixedbutton {
+	    	position: sticky;
+		    top: 3px;
+		    right: 15px; 
+		}*/
+    </style>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/rating.js' %}"></script>
+    <script src="{% static 'js/jquery.collapser.min.js' %}"></script>
+    <script src="{% static 'others/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'others/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+    <script type="text/javascript">
+    	function initAutocomplete() {
+	    	var map = new google.maps.Map(document.getElementById('pano'), {
+			    center: {lat: 0, lng: 0},
+			    zoom: 3,
+			    mapTypeId: 'roadmap'
+			  });
+
+	    	var panorama = new google.maps.StreetViewPanorama(
+			document.getElementById('pano'), {
+			  position: {lat: {{ lat }}, lng: {{ lng }}},
+			  pov: {
+			    heading: 0,
+			    pitch: 0
+			  }
+			});
+			map.setStreetView(panorama);
+		}
+		$(function(){
+			$('.reviews_div').slimScroll({
+		        height: '520px'
+		    });
+
+			$('.g_rev_txt').collapser({
+				mode: 'chars',
+				truncate: 75
+			});
+		});
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ&libraries=places&callback=initAutocomplete"
+         async defer></script>
+    
+  </head>
+  <body style="height: 100%; padding: 0px; margin: 0px">
+  	<div id="main_div" style="height: 100%; padding: 0px; margin: 0px">
+  		<div id="pano" class="col-sm-8">
+  			
+  		</div>
+  		<div class="col-sm-4">
+  			<ul class="nav nav-tabs">
+			  	<li class="tweet_symbol active"><a data-toggle="tab" href="#twitter_reviews"><span><i class="fa fa-twitter"></i></span></a></li>
+  				<li class="google_symbol"><a data-toggle="tab" href="#google_reviews"><span><i class="fa fa-google"></i></span></a></li>
+			  
+			<button type="button" id="fixedbutton" class="btn btn-info pull-right" style="align-self: center;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-map-marker"></span> Recommended Places</button>
+			</ul>
+			<div class="tab-content">
+				<div id="twitter_reviews" class="tab-pane fade in active">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<p class="block_head text-center">
+								Twitter reviews
+								<span class="text-success">
+									<span class="glyphicon glyphicon-triangle-top"></span>
+									<span> {{t_plus}}</span>
+								</span>
+								<span class="text-danger">
+									<span class="glyphicon glyphicon-triangle-bottom"></span>
+									<span> {{t_minus}}</span>
+								</span>
+							</p>
+						</div>
+						<div id="all_tweets_div" class="panel-body reviews_div">
+						{% if all_tweets %}
+						{% for twt in all_tweets %}
+							<div class="col-sm-12">
+								<div class="media">
+									<div class="media-left">
+										<img src="{{ twt.profile_img }}" class="media-object img-rounded" style="width:60px"/>
+									</div>
+									<div class="media-body">
+										
+										<div class="rate_parent">
+									<h4 class="media-heading">{{ twt.display_name }} (<a href="https://twitter.com/{{ twt.user_name }}" target="_blank">@{{ twt.user_name }})</a></h4>
+									<div class="pull-left">
+										<div class="rate_div" rating="{{ twt.rating }}"></div>
+									</div>
+								</div>	
+										<p class="text-justify text-gray"><em>{{ twt.tweet }}</em></p>
+										
+									</div>
+								</div>
+							</div>
+							<hr/>
+						{% endfor %}
+						{% else %}
+							<p class="h4">No reviews found!</p>
+						{% endif %}
+						</div>
+					</div>
+				</div>
+				<div id="google_reviews" class="tab-pane fade">
+					<div class="panel panel-danger">
+						<div class="panel-heading">
+							<p class="block_head text-center">
+								Google reviews
+								<span class="text-success">
+									<span class="glyphicon glyphicon-triangle-top"></span>
+									<span> {{g_plus}}</span>
+								</span>
+								<span class="text-danger">
+									<span class="glyphicon glyphicon-triangle-bottom"></span>
+									<span> {{g_minus}}</span>
+								</span>
+							</p>
+						</div>
+						<div id="all_tweets_div" class="panel-body reviews_div">
+						{% if google_ratings %}
+						{% for r in google_ratings %}
+							<div class="col-sm-12">
+								<div class="media">
+									<div class="media-left">
+										<img src="{{ r.img }}" class="media-object img-rounded" style="width:60px"/>
+									</div>
+									<div class="media-body">
+										<div class="rate_parent">
+											<h4 class="media-heading"><a href="{{a_url}}"" target="_blank">{{ r.user_name }}</a></h4>
+												<div class="rate_div" rating="{{ r.rating }}"></div>
+										</div>	
+										<p class="text-justify text-gray g_rev_txt"><em>{{ r.text }}</em></p>
+									</div>
+								</div>						
+							</div>
+							<hr/>
+						{% endfor %}
+						{% else %}
+							<p class="h4">No reviews found!</p>
+						{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+  		</div>
+		
+	</div>
+	<div class="col-sm-8">
+		
+		<!-- Modal -->
+		<div id="myModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog" style="color:white; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+
+		    <!-- Modal content-->
+		    <div class="modal-content" id="myModalContent">
+		      <div class="modal-header" >
+		        <button type="button" class="close" data-dismiss="modal" style="font-size: 36px; color: white">&times;</button>
+		        <h3 class="modal-title text-center">Nearby places you should consider!</h4>
+		      </div>
+		      <div class="modal-body">
+		      	{% for place in all_nearby_places %}
+		      		<div class="col-sm-4">
+				       	<div class="related_place_div">
+				       		<div class="media">
+								<div class="media-left">
+									{% if place.image %}
+									<img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={{ place.image }}&key={{ key }}" class="media-object img-rounded" style="width:60px; height: 60px"/>
+									{% else %}
+									<img src="https://www.mountaineers.org/images/placeholder-images/RoutesPlacesDefaultImage.jpg" class="media-object img-rounded" style="width:60px; height: 60px"/>
+									{% endif%}
+								</div>
+								<div class="media-body">
+									
+									<div class="rate_parent">
+										<h4 class="media-heading"><a href="review_mining/get_reviews?name={{ place.name }}&lat={{ place.location.lat }}&lng={{ place.location.lng }}&type={{ place.type }}" target="_blank">{{ place.name }}</a></h4>
+										<div class="">
+											<div class="rate_modal" rating="{{ place.rating }}"></div>
+										</div>
+										<p class="h5">{{ place.address }}</p>
+									</div>
+								</div>	
+							</div>
+				       	</div>
+				     </div>
+		      	{% endfor %}
+		      	 
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(".related_place_div").hover(function(){
+		    $(this).find(".place_description").fadeIn("slow");
+		    }, function(){
+		    $(this).find(".place_description").fadeOut("slow");
+		});
+
+	  $(".rate_div").each(function()
+	  	{
+	  		var r = $(this).attr('rating');
+	  		if(r == null || r == undefined || r == "")
+	  			r = 0
+	  		$(this).rateYo({
+	  			rating: r,
+	  			starWidth: "14px",
+	  			ratedFill: "black",
+	  			readOnly: true
+	  		})
+	  	});
+	  $(".rate_modal").each(function()
+	  	{
+	  		var r = $(this).attr('rating');
+	  		if(r == null || r == undefined || r == "")
+	  			r = 0
+	  		$(this).rateYo({
+	  			rating: r,
+	  			starWidth: "16px",
+	  			ratedFill: "#6492db",
+	  			readOnly: true
+	  		})
+	  	});
+	  	//$(document).ready(functio)
+		//$(".gm-iv-address-link").css('top','35px');
+		//alert($(".gm-iv-address-link").css('top'));
+	</script>
+</body>
+</html>
