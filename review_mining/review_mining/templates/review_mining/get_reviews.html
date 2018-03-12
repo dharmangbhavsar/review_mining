@@ -205,36 +205,28 @@
 		        <h3 class="modal-title text-center">Other Places You Could Consider ...</h4>
 		      </div>
 		      <div class="modal-body">
-		      	<div class="col-sm-4">
-			       	<div class="related_place_div">
-			       		<h4 class="place_name">Sammys</h4>
-			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
-			       	</div>
-			     </div>
-			     <div class="col-sm-4">
-			       	<div class="related_place_div">
-			       		<h4 class="place_name">Alpha</h4>
-			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
-			       	</div>
-			     </div>
-			     <div class="col-sm-4">
-			       	<div class="related_place_div">
-			       		<h4 class="place_name">Beta</h4>
-			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
-			       	</div>
-			     </div>
-			     <div class="col-sm-4">
-			       	<div class="related_place_div">
-			       		<h4 class="place_name">Gamma</h4>
-			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
-			       	</div>
-			     </div>
-			     <div class="col-sm-4">
-			       	<div class="related_place_div">
-			       		<h4 class="place_name">Zeta</h4>
-			       		<p class="place_description">Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. Lorum ipsum dolor amitus. </p>
-			       	</div>
-			     </div>
+		      	{% for place in all_nearby_places %}
+		      		<div class="col-sm-4">
+				       	<div class="related_place_div">
+				       		<div class="media">
+								<div class="media-left">
+									<img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={{ place.image }}&key={{ key }}" class="media-object img-rounded" style="width:60px"/>
+								</div>
+								<div class="media-body">
+									
+									<div class="rate_parent">
+										<h4 class="media-heading"><a href="review_mining/get_reviews?name={{ place.name }}&lat={{ place.location.lat }}&lng={{ place.location.lng }}&type={{ place.type }}" target="_blank">{{ place.name }}</a></h4>
+										<div class="pull-left">
+											<div class="rate_div" rating="{{ place.rating }}"></div>
+										</div>
+										<p class="h5">{{ place.address }}</p>
+									</div>
+								</div>	
+							</div>
+				       	</div>
+				     </div>
+		      	{% endfor %}
+		      	 
 		      </div>
 		    </div>
 

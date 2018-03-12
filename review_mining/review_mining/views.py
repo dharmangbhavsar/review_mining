@@ -142,31 +142,30 @@ class get_reviews(View):
 		#main Google places query. 
 		query_result = place.nearby_search(lat_lng = latlong, radius = 2000, rankby = "prominence", type = location_type)
 		all_nearby_places = []
-		limit = 5
+		limit = 9
 		for place in query_result.places:
 		    # Returned places from a query are place summaries.
 		    if limit <= 0: 
 		    	break
+		    else:
+		    	limit -= 1
 		    if place.name != search_name:
 			    #pprint (place.geo_location)
 			    #pprint (place.reference)
-			    pass
 			    # Referencing any of the attributes below, prior to making a call to
 			    # get_details() will raise a googleplaces.GooglePlacesAttributeError.
-			    print("-->")
+			    # print("----------------------------")
 			    place.get_details()
-			    pprint(vars(place))
+			    #pprint(vars(place))
+			    # print(place.formatted_address)
+			    # print(place.rating)
+			    # print(place.geo_location)
 			    #place.rating or place._rating
 			    #place.photos[0].photo_reference
 			    # The following method has to make a further API call.
-			    all_nearby_places.append({'image': place.photos[0].photo_reference, 'name': place.name, 'rating': place.rating})
-			    
-			    #pprint (place.details) # A dict matching the JSON response from Google.
-			    #for key in place.details:
-			     #   print(key)
-			    #lul = json.dumps(place.details)
-		limit -= 1
-		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': API_KEY})
+			    all_nearby_places.append({'image': place.photos[0].photo_reference, 'name': place.name, 'rating': place.rating, 'location': place.geo_location, 'address': place.formatted_address, 'type': place.types[0] })
+
+		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': "AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ", "all_nearby_places": all_nearby_places})
 	
 	def post(self,request):
 		pass
