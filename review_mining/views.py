@@ -37,10 +37,14 @@ class get_reviews(View):
 	template_name = "review_mining/get_reviews.html"
 
 	def get(self, request):
-		consumer_key = "DGh9KwPCvFwmOGHoBajHaCEIP"
-		consumer_secret = "h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc"
-		access_key = "963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP"
-		access_secret = "lp2Hu3FOdJ5Z563Isb7VCUtTk2UwH03LLummrYskunnd3"
+		consumer_key = "ghkzJ4mR0ywmIHIk9exDqfYBJ"
+		consumer_secret = "EDaAlc9msQtoEY8TBQzIRKBFOMo50hp3FsWVtsGpXG05Mppk05"
+		access_key = "1600221949-p6YbkDsmCEYq1MSpNWsL7gfsSrztnEtZtkXWksG"
+		access_secret = "MahHvrzl1I5sQDEGYBVMQ6HuwIGagow2zs3DcXVFztEYc"
+		# consumer_key = "DGh9KwPCvFwmOGHoBajHaCEIP"
+		# consumer_secret = "h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc"
+		# access_key = "963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP"
+		# access_secret = "lp2Hu3FOdJ5Z563Isb7VCUtTk2UwH03LLummrYskunnd3"
 		# consumer_key = "fDyXXSIZ2TIdmPUf6TmWZtxIB"
 		# consumer_secret = "YD1Olf7sgYXdjOS8wbRz7WzBiR96SHy55B8F6ZiZMOv6HOvnlA"
 		# access_key = "340750238-PMrhm6sDjQ7RpD6iW00VrTDFMN98dOUoCdbfkb8g"
@@ -53,7 +57,7 @@ class get_reviews(View):
 		longitude = float(get.get('lng'))
 		location_type = get.get('type')
 
-		max_range = 1 			# search range in kilometres
+		max_range = 2			# search range in kilometres
 		num_results = 5			# minimum results to obtain
 		
 		twitter = Twitter(
@@ -61,7 +65,7 @@ class get_reviews(View):
 
 		result_count = 0
 		t_plus, g_plus, t_minus, g_minus =0,0,0,0
-		loop_cnt = 50
+		loop_cnt = 100
 		last_id = None
 		all_tweets = []
 
@@ -71,7 +75,7 @@ class get_reviews(View):
 		# return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude})
 		
 		while result_count <  num_results and loop_cnt > 0:
-			query = twitter.search.tweets(q = "", geocode = "%f,%f,%dkm" % (latitude, longitude, max_range), count = 100, max_id = last_id)
+			query = twitter.search.tweets(q = "", geocode = "%f,%f,%dkm" % (latitude, longitude, max_range), count = 50, max_id = last_id)
 
 			for result in query["statuses"]:
 				if result["geo"]:
@@ -98,7 +102,7 @@ class get_reviews(View):
 				loop_cnt -= 1
 		
 		if result_count != 0:		
-			t_plus = int(t_plus*100/result_count)
+			t_plus = int(t_plus*100/(t_plus + t_minus))
 			t_minus = 100 - t_plus
 
 		API_KEY = 'AIzaSyBO93Qnw2QDYkMhyQOuabTMXPZw0LMPL7k'
@@ -136,7 +140,7 @@ class get_reviews(View):
 					result_count += 1
 
 		if result_count != 0:
-			g_plus = int(g_plus*100/result_count)
+			g_plus = int(g_plus*100/(g_plus + g_minus))
 			g_minus = 100 - g_plus
 						
 		latlong = {"lat":latitude, "lng":longitude}
