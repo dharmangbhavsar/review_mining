@@ -57,7 +57,7 @@ class get_reviews(View):
 
 		result_count = 0
 		t_plus, g_plus, t_minus, g_minus =0,0,0,0
-		loop_cnt = 5
+		loop_cnt = 50
 		last_id = None
 		all_tweets = []
 
