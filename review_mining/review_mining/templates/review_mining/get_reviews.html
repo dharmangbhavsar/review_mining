@@ -57,11 +57,11 @@
 	    	font-size: 150%;
 	    	margin: 10px 10px;
 	    }
-	    #fixedbutton {
-		    position: fixed;
+	    /*#fixedbutton {
+	    	position: sticky;
 		    top: 3px;
-		    right: 10px; 
-		}
+		    right: 15px; 
+		}*/
     </style>
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/rating.js' %}"></script>
@@ -111,6 +111,7 @@
 			  	<li class="tweet_symbol active"><a data-toggle="tab" href="#twitter_reviews"><span><i class="fa fa-twitter"></i></span></a></li>
   				<li class="google_symbol"><a data-toggle="tab" href="#google_reviews"><span><i class="fa fa-google"></i></span></a></li>
 			  
+			<button type="button" id="fixedbutton" class="btn btn-info pull-right" style="align-self: center;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-map-marker"></span> Recommended Places</button>
 			</ul>
 			<div class="tab-content">
 				<div id="twitter_reviews" class="tab-pane fade in active">
@@ -202,7 +203,7 @@
 		
 	</div>
 	<div class="col-sm-8">
-		<button type="button" id="fixedbutton" class="btn btn-info" style="align-self: center;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-map-marker"></span> Recommended Places</button>
+		
 		<!-- Modal -->
 		<div id="myModal" class="modal fade" role="dialog">
 		  <div class="modal-dialog" style="color:white; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
