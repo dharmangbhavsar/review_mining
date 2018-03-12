@@ -3,8 +3,8 @@
 
 ## Tech-Stack
 ### Languages
-BackEnd - Python, JavaScript
-FrontEnd - JavaScript, HTML, CSS
+BackEnd - Python, JavaScript__
+FrontEnd - JavaScript, HTML, CSS__
 NLP - Python
 
 ### APIs
@@ -14,8 +14,8 @@ Microsoft Azure TextAnalytics API, Google Places API, Google Maps API, Twitter A
 Python Standard Libraries, TextBlob, python-google-places, python-twitter, Spacy
 
 ### Frameworks
-BackEnd/FrontEnd - Django
-FrontEnd - BootStrapJS, JQuery, RateYoJS
+BackEnd/FrontEnd - Django__
+FrontEnd - BootStrapJS, JQuery, RateYoJS__
 BackEnd - Python, Django
 
 ## Sentiment Analysis Testing
