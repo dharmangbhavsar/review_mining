@@ -34,8 +34,11 @@ Also, results of TextBlob and Microsoft Azure TextAnalytics is "almost" similar.
     Precision 0.907563210781
 
 ## NLP Algorithm and Testing
-The project was tested on 3 different NLP algorithms and in the end the simplest one was used. The three different algorithms used were:< br />
-1) Named Entity Recognition (N.E.R)< br />
-2) Triword Indexing< br />
-3) Regex Matching < br />
+The project was tested on 3 different NLP algorithms and in the end the simplest one was used. The three different algorithms used were:  
+1) Named Entity Recognition (N.E.R)  
+2) Fuzzy word matching  
+3) Regex Matching   
+For named entity recognition, a new model was trained using the tweet obtained by querying the Twitter API. The reason N.E.R was not used was because it was still missing many tweets because of the lack of structure in tweets and it was incredibly slow.  
+As for regex matching, it was giving performance but it was including tweets which did not involve the exact keyword we were looking for thus including extra tweets.  
+So finally, Fuzzy word matching was used. Its performance was not as great as regex matching, but better than N.E.R and unlike regex matching, this algorithm did not include more tweets than needed. 
 
