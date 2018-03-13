@@ -57,7 +57,7 @@ class get_reviews(View):
 		longitude = float(get.get('lng'))
 		location_type = get.get('type')
 
-		max_range = 2			# search range in kilometres
+		max_range = 1			# search range in kilometres
 		num_results = 5			# minimum results to obtain
 		
 		twitter = Twitter(
@@ -75,7 +75,7 @@ class get_reviews(View):
 		# return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude})
 		
 		while result_count <  num_results and loop_cnt > 0:
-			query = twitter.search.tweets(q = "", geocode = "%f,%f,%dkm" % (latitude, longitude, max_range), count = 50, max_id = last_id)
+			query = twitter.search.tweets(q = "", geocode = "%f,%f,%dkm" % (latitude, longitude, max_range), count = 100, max_id = last_id)
 
 			for result in query["statuses"]:
 				if result["geo"]:
@@ -100,12 +100,12 @@ class get_reviews(View):
 
 				last_id = result["id"]
 				loop_cnt -= 1
-		
+		pprint(all_tweets)
 		if result_count != 0:		
 			t_plus = int(t_plus*100/(t_plus + t_minus))
 			t_minus = 100 - t_plus
 
-		API_KEY = 'AIzaSyBO93Qnw2QDYkMhyQOuabTMXPZw0LMPL7k'
+		API_KEY = 'AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ'
 
 		rating = []
 		user_input = search_name
