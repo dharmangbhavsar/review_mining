@@ -15,6 +15,8 @@ import six, difflib
 from googleplaces import GooglePlaces, types, lang
 from textblob import TextBlob
 
+API_KEY = 'AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ'
+
 #So that Python doesnt get into Codec Errors.
 def strip_non_ascii(string):
     #removing the non ascii characters from the string because Python has a lot of encoding problems
@@ -28,7 +30,8 @@ class index(View):
 	template_name = 'review_mining/index.html'	
 	
 	def get(self, request):
-		return render(request, self.template_name)
+		global API_KEY
+		return render(request, self.template_name, {"key": API_KEY})
 	
 	def post(self,request):
 		pass
@@ -37,10 +40,15 @@ class get_reviews(View):
 	template_name = "review_mining/get_reviews.html"
 
 	def get(self, request):
-		consumer_key = "ghkzJ4mR0ywmIHIk9exDqfYBJ"
-		consumer_secret = "EDaAlc9msQtoEY8TBQzIRKBFOMo50hp3FsWVtsGpXG05Mppk05"
-		access_key = "1600221949-p6YbkDsmCEYq1MSpNWsL7gfsSrztnEtZtkXWksG"
-		access_secret = "MahHvrzl1I5sQDEGYBVMQ6HuwIGagow2zs3DcXVFztEYc"
+		global API_KEY
+		consumer_key = "3r9H4rZqJ475yr0ZwSnnDitqF"
+		consumer_secret = "HJsMT2EgZ8vTWdkzTM1EQzFETBxKjBAKPmbuQYy7mj6PlZfdp6"
+		access_key = "1382165048-QZ0MHJQiQmrd0DCL2sCFyWRzBNzc4U3OQNcyHtQ"
+		access_secret = "QaZZ5L6Eq2YnSapuzNgyMIaYjBCYHsFWHiQXczG7PICAo"
+		# consumer_key = "ghkzJ4mR0ywmIHIk9exDqfYBJ"
+		# consumer_secret = "EDaAlc9msQtoEY8TBQzIRKBFOMo50hp3FsWVtsGpXG05Mppk05"
+		# access_key = "1600221949-p6YbkDsmCEYq1MSpNWsL7gfsSrztnEtZtkXWksG"
+		# access_secret = "MahHvrzl1I5sQDEGYBVMQ6HuwIGagow2zs3DcXVFztEYc"
 		# consumer_key = "DGh9KwPCvFwmOGHoBajHaCEIP"
 		# consumer_secret = "h5nGxUW36rKDYyXJF2bJRHafLOmPwOO6hPqWAraDNMh3j0DUWc"
 		# access_key = "963536281165803520-NQzBRAIa13bjmIYd2cEmgDKqgvFY3JP"
@@ -58,7 +66,7 @@ class get_reviews(View):
 		location_type = get.get('type')
 
 		max_range = 1			# search range in kilometres
-		num_results = 5			# minimum results to obtain
+		num_results = 8			# minimum results to obtain
 		
 		twitter = Twitter(
 		        auth = OAuth(access_key, access_secret, consumer_key, consumer_secret))
@@ -105,7 +113,6 @@ class get_reviews(View):
 			t_plus = int(t_plus*100/(t_plus + t_minus))
 			t_minus = 100 - t_plus
 
-		API_KEY = 'AIzaSyCkBJ4fQJUupdRiE1sgfRArEbGhCiZIVr0'
 
 		rating = []
 		user_input = search_name
@@ -178,12 +185,15 @@ class get_reviews(View):
 			    	all_nearby_places[len(all_nearby_places) - 1]['rating'] = 0
 
 		all_nearby_places = sorted(all_nearby_places, key=lambda k: k['rating'], reverse = True)
-		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': "AIzaSyCkBJ4fQJUupdRiE1sgfRArEbGhCiZIVr0", "all_nearby_places": all_nearby_places})
+		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': API_KEY, "all_nearby_places": all_nearby_places})
 	
 	def post(self,request):
 		pass
 
 	def is_related(self, text, search):
+		text.lower()
+		search.lower()
+
 		words = text.split()
 		word = search.split()
 		tweet_words = len(words)
@@ -199,7 +209,7 @@ class get_reviews(View):
 			all_words.append(t)
 		#printing all works
 		#print(all_words)
-		ans = difflib.get_close_matches(search, all_words, cutoff=0.7)
+		ans = difflib.get_close_matches(search, all_words, cutoff=0.5)
 		#Prints Yes if the search term is present
 		if(len(ans) > 0):
 			return True
