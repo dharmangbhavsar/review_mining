@@ -24,12 +24,18 @@ Google API had the same limit, I like Microsoft, chose Microsoft.
 We are choosing the TextBlob library for sentiment analytics because of the cap limit of Microsoft and Google Analytics libraries. Also, tweets needed to be changed to a specific JSON structure for Microsoft TextAnalytics API to analyse sentiments which cost an unnecessary overhead.  
 Also, results of TextBlob and Microsoft Azure TextAnalytics is "almost" similar. Thus, these above details made us tilt towards using TextBlob.
 
-# TextBlob Sentiment Analysis Results
+## TextBlob Sentiment Analysis Results
     [6918 rows]
     Accuracy 0.867236195432
     Precision 0.894869638352
-# Microsoft TextAnalytics API
+## Microsoft TextAnalytics API
     [2000 rows]
     Accuracy 0.89863014257
     Precision 0.907563210781
+
+## NLP Algorithm and Testing
+The project was tested on 3 different NLP algorithms and in the end the simplest one was used. The three different algorithms used were:< br />
+1) Named Entity Recognition (N.E.R)< br />
+2) Triword Indexing< br />
+3) Regex Matching < br />
 
