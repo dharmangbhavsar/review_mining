@@ -100,8 +100,8 @@ class get_reviews(View):
 
 				last_id = result["id"]
 				loop_cnt -= 1
-		pprint(all_tweets)
-		if result_count != 0:		
+		
+		if t_plus + t_minus != 0:		
 			t_plus = int(t_plus*100/(t_plus + t_minus))
 			t_minus = 100 - t_plus
 
@@ -139,7 +139,7 @@ class get_reviews(View):
 						g_minus+=1
 					result_count += 1
 
-		if result_count != 0:
+		if g_plus + g_minus > 0:
 			g_plus = int(g_plus*100/(g_plus + g_minus))
 			g_minus = 100 - g_plus
 						
