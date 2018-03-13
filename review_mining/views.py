@@ -105,7 +105,7 @@ class get_reviews(View):
 			t_plus = int(t_plus*100/(t_plus + t_minus))
 			t_minus = 100 - t_plus
 
-		API_KEY = 'AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ'
+		API_KEY = 'AIzaSyCkBJ4fQJUupdRiE1sgfRArEbGhCiZIVr0'
 
 		rating = []
 		user_input = search_name
@@ -178,7 +178,7 @@ class get_reviews(View):
 			    	all_nearby_places[len(all_nearby_places) - 1]['rating'] = 0
 
 		all_nearby_places = sorted(all_nearby_places, key=lambda k: k['rating'], reverse = True)
-		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': "AIzaSyAg6ItI4-Ab6_Sia46WfzZX8my-OO_NtvQ", "all_nearby_places": all_nearby_places})
+		return render(request, self.template_name, {'all_tweets':all_tweets, 'search_name': search_name, 'lat': latitude, 'lng': longitude, 'google_ratings':rating, 't_plus': t_plus, 't_minus': t_minus, 'g_plus': g_plus, 'g_minus': g_minus, 'key': "AIzaSyCkBJ4fQJUupdRiE1sgfRArEbGhCiZIVr0", "all_nearby_places": all_nearby_places})
 	
 	def post(self,request):
 		pass
