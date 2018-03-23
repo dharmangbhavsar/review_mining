@@ -10,30 +10,53 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-```
+
 The project is based on Python 3. Project uses some concepts which are avaialble after Python 3.2 so any version of Python after 3.2 can be used.
 Setup pip before trying the installation given below.
 
+Django
+Installation - 
+
+```pip install Django```  
+
+After Django is installed, go to the root folder (containing manage.py file) and run cmd command - 
+
+```python manage.py runserver```
+
+The application will now be running at localhost:8000/review_mining/    
+
 Google Places Python API
-Installation - pip install python-google-places
-After installation is finished, you will have to follow the steps given here - https://developers.google.com/places/web-service/get-api-key to get the keys required for Google Places API.
+Installation - 
+
+```pip install python-google-places```
+
+After installation is finished, you will have to follow the steps given here - 
+[https://developers.google.com/places/web-service/get-api-key](https://developers.google.com/places/web-service/get-api-key) to get the keys required for Google Places API.  
 
 Twitter Python API
-Installation - pip install twitter
-After installation is finished, you will have to create a new application here and get access keys from Twitter to be able to query Twitter for tweets. 
+Installation - 
 
+```pip install twitter```
+
+After installation is finished, you will have to create a new application here and get access keys from Twitter to be able to query Twitter for tweets.   
+  
 TextBlob
-Installation - pip install textblob
+Installation - 
+
+```pip install textblob```
+
 TextBlob is used for sentiment analysis.
 
 Microsoft Azure TextAnaltyics API
 Though this API is not used in the final iteration of the project, here is the description if this needs to be used. 
-You should follow some instructions from here :- https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/ 
+You should follow some instructions from here :- 
+[https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)
 
 Spacy (NLP Library)
-This is not used in the final iteration of the project, here is the link from where you can download Spacy :- https://spacy.io/
+This is not used in the final iteration of the project, here is the link from where you can download Spacy :- 
+[https://spacy.io/](https://spacy.io/)
 
-```
+
 ## Tech-Stack
 ### Languages
 **BackEnd** - Python, JavaScript  
