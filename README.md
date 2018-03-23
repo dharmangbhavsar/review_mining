@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-'''
+```
 The project is based on Python 3. Project uses some concepts which are avaialble after Python 3.2 so any version of Python after 3.2 can be used.
 Setup pip before trying the installation given below.
 #### Google Places Python API
@@ -32,7 +32,7 @@ You should follow some instructions from here :- https://azure.microsoft.com/en-
 #### Spacy (NLP Library)
 This is not used in the final iteration of the project, here is the link from where you can download Spacy :- https://spacy.io/
 
-'''
+```
 ## Tech-Stack
 ### Languages
 **BackEnd** - Python, JavaScript  
